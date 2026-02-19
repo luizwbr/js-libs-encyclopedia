@@ -25,6 +25,11 @@
   const modalContent = document.getElementById("modal-content");
   const modalClose = document.getElementById("modal-close");
   const resetFiltersBtn = document.getElementById("reset-filters");
+  const heroBadgeCount = document.getElementById("hero-badge-count");
+  const submitLibBtn = document.getElementById("submit-lib-btn");
+  const submitModalOverlay = document.getElementById("submit-modal-overlay");
+  const submitModalClose = document.getElementById("submit-modal-close");
+  const submitLibForm = document.getElementById("submit-lib-form");
 
   // ── Category Counts ────────────────────────────────────────────────────
   function getCategoryCounts() {
@@ -231,6 +236,66 @@
     document.body.style.overflow = "";
   }
 
+  // ── Submit Library Modal ───────────────────────────────────────────────
+  function openSubmitModal() {
+    submitModalOverlay.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(function () {
+      submitModalClose.focus();
+    });
+  }
+
+  function closeSubmitModal() {
+    submitModalOverlay.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  submitLibBtn.addEventListener("click", openSubmitModal);
+  submitModalClose.addEventListener("click", closeSubmitModal);
+
+  submitModalOverlay.addEventListener("click", function (e) {
+    if (e.target === submitModalOverlay) closeSubmitModal();
+  });
+
+  submitLibForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var data = new FormData(submitLibForm);
+    var name = (data.get("name") || "").trim();
+    var description = (data.get("description") || "").trim();
+    var category = (data.get("category") || "").trim();
+    var tags = (data.get("tags") || "").trim();
+    var website = (data.get("website") || "").trim();
+    var github = (data.get("github") || "").trim();
+    var npm = (data.get("npm") || "").trim();
+    var created = (data.get("created") || "").trim();
+    var language = (data.get("language") || "").trim();
+
+    if (!name || !description || !category || !language) return;
+
+    var body = [
+      "## New Library Submission",
+      "",
+      "| Field | Value |",
+      "|-------|-------|",
+      "| **Name** | " + name + " |",
+      "| **Description** | " + description + " |",
+      "| **Category** | " + category + " |",
+      "| **Tags** | " + tags + " |",
+      "| **Website** | " + (website || "—") + " |",
+      "| **GitHub** | " + (github || "—") + " |",
+      "| **npm** | " + (npm || "—") + " |",
+      "| **Year Created** | " + (created || "—") + " |",
+      "| **Language** | " + language + " |",
+    ].join("\n");
+
+    var issueUrl = "https://github.com/luizwbr/js-libs-encyclopedia/issues/new"
+      + "?title=" + encodeURIComponent("Add Library: " + name)
+      + "&body=" + encodeURIComponent(body)
+      + "&labels=new-library";
+
+    window.open(issueUrl, "_blank", "noopener,noreferrer");
+  });
+
   // ── Event Listeners ────────────────────────────────────────────────────
   searchInput.addEventListener("input", function () {
     state.search = searchInput.value;
@@ -276,8 +341,9 @@
 
   // Keyboard navigation
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && !modalOverlay.classList.contains("hidden")) {
-      closeModal();
+    if (e.key === "Escape") {
+      if (!modalOverlay.classList.contains("hidden")) closeModal();
+      if (!submitModalOverlay.classList.contains("hidden")) closeSubmitModal();
     }
     // Slash key focuses search
     if (e.key === "/" && document.activeElement !== searchInput) {
@@ -289,6 +355,7 @@
   // ── Initialise ─────────────────────────────────────────────────────────
   function init() {
     totalCount.textContent = libraries.length;
+    heroBadgeCount.textContent = libraries.length + "+";
     renderFilters();
     renderCards();
   }
