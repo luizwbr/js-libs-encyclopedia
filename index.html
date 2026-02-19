@@ -24,6 +24,13 @@
             <span class="logo-text">JS Libs <span class="logo-accent">Encyclopedia</span></span>
           </a>
           <div class="nav-actions">
+            <button class="submit-lib-btn" id="submit-lib-btn" aria-label="Submit a new library">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Submit Library</span>
+            </button>
             <a href="https://github.com/luizwbr/js-libs-encyclopedia" class="github-link" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
                 <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
@@ -40,7 +47,7 @@
       <div class="container">
         <div class="hero-badge">
           <span class="badge-dot" aria-hidden="true"></span>
-          <span>30+ Libraries Catalogued</span>
+          <span id="hero-badge-count">50+</span> <span>Libraries Catalogued</span>
         </div>
         <h1 class="hero-title">
           The Modern
@@ -153,6 +160,95 @@
         </div>
       </div>
     </main>
+
+    <!-- Submit Library Modal -->
+    <div class="modal-overlay hidden" id="submit-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="submit-modal-title">
+      <div class="modal submit-modal">
+        <button class="modal-close" id="submit-modal-close" aria-label="Close submit form">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="modal-content">
+          <div class="submit-modal-header">
+            <div class="submit-modal-icon" aria-hidden="true">➕</div>
+            <div>
+              <h2 class="modal-name" id="submit-modal-title">Submit a Library</h2>
+              <p class="modal-tagline">Know a great JS library that's missing? Share it with the community!</p>
+            </div>
+          </div>
+          <form id="submit-lib-form" novalidate>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="field-name" class="form-label">Library Name <span class="form-required" aria-hidden="true">*</span></label>
+                <input type="text" id="field-name" name="name" class="form-input" placeholder="e.g. React" required autocomplete="off" />
+              </div>
+              <div class="form-field">
+                <label for="field-language" class="form-label">Language <span class="form-required" aria-hidden="true">*</span></label>
+                <input type="text" id="field-language" name="language" class="form-input" placeholder="e.g. TypeScript" required autocomplete="off" />
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="field-description" class="form-label">Description <span class="form-required" aria-hidden="true">*</span></label>
+              <textarea id="field-description" name="description" class="form-textarea" placeholder="A short description of what the library does…" rows="3" required></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="field-category" class="form-label">Category <span class="form-required" aria-hidden="true">*</span></label>
+                <select id="field-category" name="category" class="form-select" required>
+                  <option value="" disabled selected>Select a category</option>
+                  <option value="ui-framework">UI Framework</option>
+                  <option value="meta-framework">Meta Framework</option>
+                  <option value="state-management">State Management</option>
+                  <option value="utility">Utility</option>
+                  <option value="backend">Backend</option>
+                  <option value="data-viz">Data Visualization</option>
+                  <option value="animation">Animation</option>
+                  <option value="graphics">3D &amp; Graphics</option>
+                  <option value="build-tool">Build Tool</option>
+                  <option value="testing">Testing</option>
+                  <option value="styling">Styling</option>
+                  <option value="tooling">Tooling</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="field-created" class="form-label">Year Created</label>
+                <input type="number" id="field-created" name="created" class="form-input" placeholder="e.g. 2020" min="1995" max="2030" autocomplete="off" />
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="field-tags" class="form-label">Tags <span class="form-hint">(comma-separated)</span></label>
+              <input type="text" id="field-tags" name="tags" class="form-input" placeholder="e.g. React, SSR, TypeScript" autocomplete="off" />
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="field-website" class="form-label">Website URL</label>
+                <input type="url" id="field-website" name="website" class="form-input" placeholder="https://…" autocomplete="off" />
+              </div>
+              <div class="form-field">
+                <label for="field-npm" class="form-label">npm Package</label>
+                <input type="text" id="field-npm" name="npm" class="form-input" placeholder="e.g. my-library" autocomplete="off" />
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="field-github" class="form-label">GitHub URL</label>
+              <input type="url" id="field-github" name="github" class="form-input" placeholder="https://github.com/…" autocomplete="off" />
+            </div>
+            <div class="submit-form-actions">
+              <p class="submit-form-note">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                Submitting will open a pre-filled GitHub Issue for review.
+              </p>
+              <button type="submit" class="submit-form-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                Open GitHub Issue
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal Overlay -->
     <div class="modal-overlay hidden" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
